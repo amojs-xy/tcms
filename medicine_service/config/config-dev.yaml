@@ -1,0 +1,20 @@
+db:
+  host: 0.0.0.0
+  port: 3306
+  user: root
+  password: 123114
+  db_name: tcms
+
+grpc:
+  host: 0.0.0.0
+  port: 50001
+
+log:
+  file_path: "./log/log-info.log"
+  max_size: 1
+  max_backups: 3
+  max_age: 30
+
+pagination:
+  pn: 1
+  ps: 10

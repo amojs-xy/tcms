@@ -1,0 +1,48 @@
+syntax = "proto3";
+option go_package = "./;proto";
+
+message MedicineSearchRequest {
+  string Keyword = 1;
+}
+
+message MedicineInfo {
+  int32 id = 1;
+  int32 cid = 2;
+  int32 scid = 3;
+  string name = 4;
+  string alias = 5;
+  int32 characterId = 6;
+  string tastingIds = 7;
+  string attributionIds = 8;
+  string effect = 9;
+  int32 toxic = 11;
+  float price = 12;
+  string unit = 13;
+}
+
+message MedicineSearchResponse {
+  repeated MedicineInfo medicineList = 1;
+}
+
+message PrescriptionMedicine {
+  int32 medicineId = 2;
+  string medicineName = 3;
+  float dose = 4;
+  float price = 5;
+}
+
+message PrescriptionRequest {
+  repeated PrescriptionMedicine medicineList = 1;
+}
+
+message PrescriptionResponse {
+  int32 PrescriptionId = 1;
+  int32 medicineTotal = 2;
+  int32 totalPrice = 3;
+  repeated PrescriptionMedicine medicineList = 4;
+}
+
+service Medicine {
+    rpc searchMedicine (MedicineSearchRequest) returns (MedicineSearchResponse);
+    rpc submitPrescription (PrescriptionRequest) returns (PrescriptionResponse);
+}
