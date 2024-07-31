@@ -4,6 +4,7 @@ go 1.22.5
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1

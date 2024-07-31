@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"medicine_api/config"
+	"medicine_api/middleware"
 	"medicine_api/router"
 	"medicine_api/util"
 )
@@ -26,6 +27,7 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(middleware.Cors(*cfg.AllowOrigins))
 
 	conn, err := util.GrpcDial(*cfg.MedicineService)
 
