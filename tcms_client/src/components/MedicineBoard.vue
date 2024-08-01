@@ -113,7 +113,6 @@ const handleMenuDown = () => {
 }
 
 const handleMenuEnter = () => {
-    console.log(medicineList.value);
     selectMedicine(medicineList.value[activeIndex.value]);
 }
 

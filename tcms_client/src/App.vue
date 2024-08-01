@@ -15,7 +15,7 @@
 <script setup lang="ts">
 
 import MedicineBoard from "./components/MedicineBoard.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 
 const  medicineList = ref([])
 
@@ -87,6 +87,18 @@ const setMedicineTotal = ({ id, total, dose }) => {
     });
 }
 
+watch(() => dose.value, () => {
+    if (dose.value === '') {
+        dose.value = 0;
+    }
+
+    if (!/^\d+/.test(dose.value)) {
+        dose.value = 0;
+        return;
+    }
+
+
+})
 </script>
 
 <style lang="scss" scoped>
