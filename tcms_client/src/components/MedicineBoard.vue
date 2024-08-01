@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="dos-wrapper">
-        <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" @focus="handleInputFocus" @blur="handleInputBlur" />
+        <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" />
         <span>g</span>
     </div>
     <div class="price-wrapper" :style="{ display: data.total !== 0 ? '' : 'none' }">
