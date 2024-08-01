@@ -1,5 +1,5 @@
 <template>
-<div class="medicine-board">
+<div class="medicine-board" :data-id="data.id">
     <span class="times" @click="deleteMedicine(data.id)">&times;</span>
     <div class="name-wrapper">
         <input
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="dos-wrapper">
-        <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" />
+        <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" @focus="handleInputFocus" @blur="handleInputBlur" />
         <span>g</span>
     </div>
     <div class="price-wrapper" :style="{ display: data.total !== 0 ? '' : 'none' }">
@@ -122,7 +122,6 @@ const deleteMedicine = (id) => {
     if (id === 0) return;
     emit('delete-medicine', id);
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -147,12 +146,13 @@ input:focus {
 
     .name-wrapper {
         position: relative;
+        width: 130px;
         margin-bottom: 20px;
 
         input {
             width: 100%;
             height: 50px;
-            font-size: 30px;
+            font-size: 25px;
         }
 
         .medicine-select {
@@ -183,7 +183,7 @@ input:focus {
 
     .dos-wrapper {
         input {
-            width: 80px;
+            width: 60px;
             height: 30px;
             font-size: 20px;
             text-align: center;

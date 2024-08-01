@@ -3,14 +3,24 @@
 <template>
   <div class="container">
       <div class="medcine-wrapper">
-          <medicine-board
-              v-for="m of medicineList"
-              :key="m.id"
-              :data="m"
-              @set-data="setData"
-              @set-medicine-total="setMedicineTotal"
-              @delete-medicine="deleteMedicine"
-          />
+          <vue-draggable
+                  ref="el"
+                  v-model="medicineList"
+                  :disabled="disabled"
+                  :animation="150"
+                  ghostClass="ghost"
+                  @start="onStart"
+                  @update="onUpdate"
+          >
+              <medicine-board
+                  v-for="m of medicineList"
+                  :key="m.id"
+                  :data="m"
+                  @set-data="setData"
+                  @set-medicine-total="setMedicineTotal"
+                  @delete-medicine="deleteMedicine"
+              />
+          </vue-draggable>
       </div>
       <div class="total-wrapper">
           <div>
@@ -28,10 +38,31 @@
 
 import MedicineBoard from "./components/MedicineBoard.vue";
 import {computed, onMounted, ref, toRaw, watch} from "vue";
+import { type UseDraggableReturn, VueDraggable } from 'vue-draggable-plus';
+
+const el = ref<UseDraggableReturn>();
+const disabled = ref(false);
+
+const onStart = (e) => {
+    // console.log(e)
+}
+
+const onUpdate = () => {
+    const id0MedicineIndex = medicineList.value.findIndex(m => m.id === 0);
+    const finalIndex = medicineList.value.length - 1;
+
+    if (id0MedicineIndex !== finalIndex) {
+        const temp = medicineList.value[finalIndex];
+
+        medicineList.value[finalIndex] = medicineList.value[id0MedicineIndex];
+        medicineList.value[id0MedicineIndex] = temp;
+    }
+}
 
 const  medicineList = ref([])
 
 const dose = ref(1);
+const dragging = ref(false);
 
 const isSubmitPass = ref(false);
 
@@ -154,11 +185,15 @@ function submitPrescription () {
     margin: 0 auto;
 
     .medcine-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: flex-start;
         padding: 50px 0;
+
+        > div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            width: 100%;
+        }
     }
 
     .total-wrapper {
@@ -194,6 +229,11 @@ function submitPrescription () {
              }
         }
     }
+}
+
+.ghost {
+    opacity: 0.5;
+    background: #efefef;
 }
 
 </style>
