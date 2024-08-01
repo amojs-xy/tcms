@@ -6,8 +6,13 @@
           <medicine-board v-for="m of medicineList" :key="m.id" :data="m" @set-data="setData" @set-medicine-total="setMedicineTotal" />
       </div>
       <div class="total-wrapper">
-          共<input type="number" v-model="dose" />剂，
-          总计<span>{{ total }}</span>元
+          <div>
+              <button :disabled="!isSubmitPass" @click="submitPrescription">提交配方</button>
+          </div>
+          <div>
+              共<input type="number" v-model="dose" />剂，
+              总计<span>{{ total }}</span>元
+          </div>
       </div>
   </div>
 </template>
@@ -15,11 +20,13 @@
 <script setup lang="ts">
 
 import MedicineBoard from "./components/MedicineBoard.vue";
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, toRaw, watch} from "vue";
 
 const  medicineList = ref([])
 
 const dose = ref(1);
+
+const isSubmitPass = ref(false);
 
 const total = computed(() => {
     let singleTotal = medicineList.value.reduce((prev, next) => {
@@ -62,29 +69,37 @@ const setData = (medicine) => {
             return m;
         })
 
+        checkSubmitPass();
+
         return
-    } else {
-        medicineList.value[medicineList.value.length - 1] = {
-            ...medicineList.value[medicineList.value.length - 1],
-            ...medicine
-        }
     }
+
+    medicineList.value[medicineList.value.length - 1] = {
+        ...medicineList.value[medicineList.value.length - 1],
+        ...medicine
+    }
+
+
 
     medicineList.value.push({
         ...emptyData,
         name: ''
     });
+
+    checkSubmitPass();
 }
 
 const setMedicineTotal = ({ id, total, dose }) => {
     medicineList.value = medicineList.value.map(m => {
         if (m.id === id) {
-            m.total = total;
-            m.dose = dose;
+            m.total = Number(total);
+            m.dose = Number(dose);
         }
 
         return m;
     });
+
+    checkSubmitPass();
 }
 
 watch(() => dose.value, () => {
@@ -96,9 +111,30 @@ watch(() => dose.value, () => {
         dose.value = 0;
         return;
     }
+});
 
+watch(() => medicineList.value, checkSubmitPass)
 
-})
+function checkSubmitPass () {
+    if (!medicineList.value.slice(0, medicineList.value.length - 1).length) {
+        isSubmitPass.value = false;
+        return;
+    }
+
+    isSubmitPass.value = medicineList.value.slice(0, medicineList.value.length - 1).every(m => {
+        return m.id !== 0 && m.dose != 0;
+    });
+}
+
+function submitPrescription () {
+    const prescription = {
+        dose: dose.value,
+        total: Number(total.value),
+        medicineList: toRaw(medicineList.value).slice(0, medicineList.value.length - 1)
+    }
+
+    console.log(prescription)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -116,9 +152,9 @@ watch(() => dose.value, () => {
 
     .total-wrapper {
         border-top: 1px solid #ededed;
-        padding: 50px;
+        padding: 50px 0;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
 
         font-size: 20px;
 
@@ -131,6 +167,19 @@ watch(() => dose.value, () => {
 
             &:focus {
                border-color: #ccc;
+             }
+        }
+
+        button {
+            outline: none;
+            background-color: #1989fa;
+            border: 1px solid #1989fa;
+            color: #fff;
+            width: 120px;
+            height: 38px;
+
+            &:disabled {
+                opacity: .5;
              }
         }
     }
