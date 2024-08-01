@@ -3,7 +3,14 @@
 <template>
   <div class="container">
       <div class="medcine-wrapper">
-          <medicine-board v-for="m of medicineList" :key="m.id" :data="m" @set-data="setData" @set-medicine-total="setMedicineTotal" />
+          <medicine-board
+              v-for="m of medicineList"
+              :key="m.id"
+              :data="m"
+              @set-data="setData"
+              @set-medicine-total="setMedicineTotal"
+              @delete-medicine="deleteMedicine"
+          />
       </div>
       <div class="total-wrapper">
           <div>
@@ -100,6 +107,10 @@ const setMedicineTotal = ({ id, total, dose }) => {
     });
 
     checkSubmitPass();
+}
+
+const deleteMedicine = (id) => {
+    medicineList.value = medicineList.value.filter(m => m.id !== id);
 }
 
 watch(() => dose.value, () => {

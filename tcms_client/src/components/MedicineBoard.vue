@@ -1,5 +1,6 @@
 <template>
 <div class="medicine-board">
+    <span class="times" @click="deleteMedicine(data.id)">&times;</span>
     <div class="name-wrapper">
         <input
             type="text"
@@ -47,7 +48,8 @@ const activeIndex = ref(0);
 
 const emit = defineEmits([
     'set-data',
-    'set-medicine-total'
+    'set-medicine-total',
+    'delete-medicine'
 ])
 
 const searchMedicine = async () => {
@@ -116,6 +118,11 @@ const handleMenuEnter = () => {
     selectMedicine(medicineList.value[activeIndex.value]);
 }
 
+const deleteMedicine = (id) => {
+    if (id === 0) return;
+    emit('delete-medicine', id);
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -130,6 +137,7 @@ input:focus {
 }
 
 .medicine-board {
+    position: relative;
     width: 25%;
     height: 200px;
     border: 1px solid #ededed;
@@ -192,6 +200,16 @@ input:focus {
         margin-top: 30px;
         color: #999;
         font-size: 14px;
+    }
+
+    .times {
+        position: absolute;
+        right: 10px;
+        top: 0;
+        z-index: 1;
+        cursor: pointer;
+        font-size: 20px;
+        color: #666;
     }
 
 }
