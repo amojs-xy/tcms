@@ -1,13 +1,23 @@
 <template>
 <div class="medicine-board">
     <div class="name-wrapper">
-        <input type="text" v-model="medicineName" placeholder="中药名称" @input="searchMedicine" />
+        <input
+            type="text"
+            v-model="data.name"
+            placeholder="中药名称"
+            @input="searchMedicine"
+            @blur="handleMedicineNameBlur"
+            @keydown.up="handleMenuUp"
+            @keydown.down="handleMenuDown"
+            @keyup.enter="handleMenuEnter"
+        />
         <div class="medicine-select" :style="{ display: isListShow ? '' : 'none' }">
             <div
-                class="option"
-                v-for="m of medicineList"
+                v-for="(m, i) of medicineList"
+                :class="['option', activeIndex === i ? 'active' : '']"
                 :key="m.id"
                 @click="selectMedicine(m)"
+
             >{{ m.name }}</div>
         </div>
     </div>
@@ -15,27 +25,34 @@
         <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" />
         <span>g</span>
     </div>
-    <div class="price-wrapper" :style="{ display: (medicineDose.value !== 0 && medicineName.value !== '') ? '' : 'none' }">
-        <span>{{ price }}元</span>
+    <div class="price-wrapper" :style="{ display: data.total !== 0 ? '' : 'none' }">
+        <span>{{ data.total }}元</span>
     </div>
 </div>
 </template>
 
 <script setup>
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 import {searchMedicineService} from "../service/medicine.ts";
 
-const medicineName = ref('');
+const props = defineProps({
+    data: Object
+});
+
 const medicineDose = ref(0);
 const isListShow = ref(false)
 const medicineList = ref([]);
 const medicineInfo = ref(null);
-const price = ref(0);
+const activeIndex = ref(0);
 
-const emit = defineEmits(['send-data'])
+const emit = defineEmits([
+    'set-data',
+    'set-medicine-total'
+])
 
 const searchMedicine = async () => {
-    const value = medicineName.value.trim();
+    const value = props.data.name.trim();
+    activeIndex.value = 0;
     if (value.length) {
         try {
             const { data } = await searchMedicineService(value);
@@ -43,7 +60,6 @@ const searchMedicine = async () => {
             if (data === null) {
                 isListShow.value = false;
                 medicineList.value = [];
-                medicineName.value = '';
                 return;
             }
 
@@ -54,16 +70,21 @@ const searchMedicine = async () => {
         } catch (e) {
             isListShow.value = false;
             medicineList.value = [];
-            medicineName.value = '';
         }
+    } else {
+        isListShow.value = false;
+        medicineList.value = [];
     }
 }
 
-const selectMedicine = (medicineInfo) => {
-    medicineName.value = medicineInfo.name;
-    medicineInfo.value = medicineInfo;
+const handleMedicineNameBlur = () => {
+    setTimeout(() =>isListShow.value = false, 500);
+}
+
+const selectMedicine = (m) => {
+    emit('set-data', m);
+    medicineInfo.value = m;
     isListShow.value = false;
-    emit('send-data', medicineInfo);
 }
 
 const inputDose = () => {
@@ -72,7 +93,28 @@ const inputDose = () => {
         return;
     }
 
-    price.value = medicineInfo.price * medicineDose.value;
+    if (props.data.id !== 0) {
+        emit('set-medicine-total', {
+            id: props.data.id,
+            total: (props.data.price * medicineDose.value).toFixed(1),
+            dose: medicineDose.value
+        })
+    }
+}
+
+const handleMenuUp = () => {
+    if (activeIndex.value <= 0) return;
+    activeIndex.value --;
+}
+
+const handleMenuDown = () => {
+    if (activeIndex.value >= medicineList.value.length - 1) return;
+    activeIndex.value ++;
+}
+
+const handleMenuEnter = () => {
+    console.log(medicineList.value);
+    selectMedicine(medicineList.value[activeIndex.value]);
 }
 
 </script>
@@ -89,13 +131,12 @@ input:focus {
 }
 
 .medicine-board {
-    width: 200px;
+    width: 25%;
     height: 200px;
     border: 1px solid #ededed;
     box-sizing: border-box;
     padding: 20px;
-    margin-right: 30px;
-    margin-top: 30px;
+    /*margin: 10px;*/
 
     .name-wrapper {
         position: relative;
@@ -126,6 +167,10 @@ input:focus {
                    background-color: #efefef;
                  }
             }
+
+            .active {
+                background-color: #efefef;
+            }
         }
     }
 
@@ -140,6 +185,14 @@ input:focus {
         span {
             font-size: 25px;
         }
+    }
+
+    .price-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 30px;
+        color: #999;
+        font-size: 14px;
     }
 
 }
