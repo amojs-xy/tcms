@@ -39,6 +39,7 @@ func MedicineModelToResponse(medicine model.Medicine) *proto.MedicineInfo {
 		Toxic:          medicine.Toxic,
 		Price:          price,
 		Unit:           unit,
+		JinPrice:       medicine.Price,
 	}
 }
 
@@ -47,7 +48,7 @@ func (m Medicine) SearchMedicine(ctx context.Context, r *proto.MedicineSearchReq
 
 	var medicineList []model.Medicine
 
-	result := m.DB.Where("(name LIKE ?) or (pinyin LIKE ?) or (abbr LIKE ?)", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%").Find(&medicineList)
+	result := m.DB.Where("(name LIKE ?) or (pinyin LIKE ?) or (abbr LIKE ?) or (alias LIKE ?)", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%").Find(&medicineList)
 
 	if result.Error != nil {
 		return nil, result.Error

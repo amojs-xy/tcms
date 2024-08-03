@@ -18,6 +18,7 @@ message MedicineInfo {
   int32 toxic = 11;
   float price = 12;
   string unit = 13;
+  float jinPrice = 14;
 }
 
 message MedicineSearchResponse {

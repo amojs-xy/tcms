@@ -1,6 +1,6 @@
 <template>
 <div class="medicine-board" :data-id="data.id">
-    <span class="times" @click="deleteMedicine(data.id)">&times;</span>
+    <span class="icon icon-times" @click="deleteMedicine(data.id)">&times;</span>
     <div class="name-wrapper">
         <input
             type="text"
@@ -12,15 +12,15 @@
             @keydown.down="handleMenuDown"
             @keyup.enter="handleMenuEnter"
         />
-        <div class="medicine-select" :style="{ display: isListShow ? '' : 'none' }">
-            <div
-                v-for="(m, i) of medicineList"
-                :class="['option', activeIndex === i ? 'active' : '']"
-                :key="m.id"
-                @click="selectMedicine(m)"
-
-            >{{ m.name }}</div>
+        <div>
+            <span class="name-tip">{{ data.jinPrice || 0 }}元/斤</span> | <span class="name-tip">{{ data.price }}元/g</span>
         </div>
+        <medicine-menu
+            :isListShow="isListShow"
+            :medicine-list="medicineList"
+            :active-index="activeIndex"
+            @select-medicine="selectMedicine"
+        ></medicine-menu>
     </div>
     <div class="dos-wrapper">
         <input type="number" v-model="medicineDose" placeholder="0" @input="inputDose" />
@@ -35,6 +35,8 @@
 <script setup>
 import {ref} from 'vue';
 import {searchMedicineService} from "../service/medicine.ts";
+import MedicineMenu from './MedicineMenu.vue';
+import _ from 'lodash'
 
 const props = defineProps({
     data: Object
@@ -52,32 +54,34 @@ const emit = defineEmits([
     'delete-medicine'
 ])
 
-const searchMedicine = async () => {
-    const value = props.data.name.trim();
-    activeIndex.value = 0;
-    if (value.length) {
-        try {
-            const { data } = await searchMedicineService(value);
+const searchMedicine = _.debounce(
+    async () => {
+        const value = props.data.name.trim();
+        activeIndex.value = 0;
+        if (value.length) {
+            try {
+                const { data } = await searchMedicineService(value);
 
-            if (data === null) {
+                if (data === null) {
+                    isListShow.value = false;
+                    medicineList.value = [];
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    medicineList.value = data;
+                    isListShow.value = true;
+                }
+            } catch (e) {
                 isListShow.value = false;
                 medicineList.value = [];
-                return;
             }
-
-            if (data && data.length > 0) {
-                medicineList.value = data;
-                isListShow.value = true;
-            }
-        } catch (e) {
+        } else {
             isListShow.value = false;
             medicineList.value = [];
         }
-    } else {
-        isListShow.value = false;
-        medicineList.value = [];
-    }
-}
+    }, 300
+)
 
 const handleMedicineNameBlur = () => {
     setTimeout(() =>isListShow.value = false, 500);
@@ -142,42 +146,21 @@ input:focus {
     border: 1px solid #ededed;
     box-sizing: border-box;
     padding: 20px;
-    /*margin: 10px;*/
 
     .name-wrapper {
         position: relative;
-        width: 130px;
         margin-bottom: 20px;
 
-        input {
-            width: 100%;
-            height: 50px;
-            font-size: 25px;
+        .name-tip {
+            color: #999;
+            font-size: 14px;
         }
 
-        .medicine-select {
-            position: absolute;
-            left: 0;
-            top: 50px;
-            width: 100%;
-            background-color: #fff;
-            border: 1px solid #ededed;
-            box-sizing: border-box;
-            
-            .option {
-                text-align: center;
-                cursor: pointer;
-                height: 30px;
-                line-height: 30px;
 
-                &:hover {
-                   background-color: #efefef;
-                 }
-            }
-
-            .active {
-                background-color: #efefef;
-            }
+        input {
+            width: 130px;
+            height: 50px;
+            font-size: 25px;
         }
     }
 
@@ -197,20 +180,25 @@ input:focus {
     .price-wrapper {
         display: flex;
         justify-content: flex-end;
-        margin-top: 30px;
+        margin-top: 10px;
         color: #999;
         font-size: 14px;
     }
 
-    .times {
+    .icon {
         position: absolute;
-        right: 10px;
         top: 0;
         z-index: 1;
         cursor: pointer;
         font-size: 20px;
         color: #666;
+
+            &.icon-times {
+                right: 10px;
+            }
     }
+
+
 
 }
 </style>
