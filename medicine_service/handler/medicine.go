@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"medicine_service/model"
 	"medicine_service/proto"
+	"medicine_service/util"
 )
 
 type Medicine struct {
@@ -13,7 +14,7 @@ type Medicine struct {
 	proto.UnimplementedMedicineServer
 }
 
-func MedicineModelToResponse(medicine model.Medicine) *proto.MedicineInfo {
+func MedicineModelToResponse(medicine model.Medicine, tastingList string, attributionList string) *proto.MedicineInfo {
 	var price float32 = 0
 	var unit = ""
 
@@ -26,20 +27,41 @@ func MedicineModelToResponse(medicine model.Medicine) *proto.MedicineInfo {
 		unit = "g"
 	}
 
+	medicineCategory := &proto.MedicineCatetory{
+		Id:   medicine.MedicineCategory.Id,
+		Name: medicine.MedicineCategory.Name,
+	}
+
+	medicineSubcategory := &proto.MedicineSubcatetory{
+		Id:   medicine.MedicineSubcategory.Id,
+		Pid:  medicine.MedicineSubcategory.Pid,
+		Name: medicine.MedicineSubcategory.Name,
+	}
+
+	medicineCharacter := &proto.MedicineCharacter{
+		Id:   medicine.MedicineCharacter.Id,
+		Name: medicine.MedicineCharacter.Name,
+	}
+
 	return &proto.MedicineInfo{
-		Id:             medicine.Id,
-		Cid:            medicine.Cid,
-		Scid:           medicine.Scid,
-		Name:           medicine.Name,
-		Alias:          medicine.Alias,
-		CharacterId:    medicine.CharacterId,
-		TastingIds:     medicine.TastingIds,
-		AttributionIds: medicine.AttributionIds,
-		Effect:         medicine.Effect,
-		Toxic:          medicine.Toxic,
-		Price:          price,
-		Unit:           unit,
-		JinPrice:       medicine.Price,
+		Id:                   medicine.Id,
+		Cid:                  medicine.Cid,
+		Scid:                 medicine.Scid,
+		Name:                 medicine.Name,
+		Alias:                medicine.Alias,
+		CharacterId:          medicine.CharacterId,
+		TastingIds:           medicine.TastingIds,
+		AttributionIds:       medicine.AttributionIds,
+		Effect:               medicine.Effect,
+		Toxic:                medicine.Toxic,
+		Price:                price,
+		Unit:                 unit,
+		JinPrice:             medicine.Price,
+		MedicineCatetory:     medicineCategory,
+		MedicineSubcatetory:  medicineSubcategory,
+		MedicineCharacter:    medicineCharacter,
+		MedicineTastings:     tastingList,
+		MedicineAttributions: attributionList,
 	}
 }
 
@@ -48,7 +70,12 @@ func (m Medicine) SearchMedicine(ctx context.Context, r *proto.MedicineSearchReq
 
 	var medicineList []model.Medicine
 
-	result := m.DB.Where("(name LIKE ?) or (pinyin LIKE ?) or (abbr LIKE ?) or (alias LIKE ?)", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%").Find(&medicineList)
+	result := m.DB.
+		Preload("MedicineCategory").
+		Preload("MedicineSubcategory").
+		Preload("MedicineCharacter").
+		Where("(name LIKE ?) or (pinyin LIKE ?) or (abbr LIKE ?) or (alias LIKE ?)", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%", "%"+kw+"%").
+		Find(&medicineList)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -57,7 +84,26 @@ func (m Medicine) SearchMedicine(ctx context.Context, r *proto.MedicineSearchReq
 	response := &proto.MedicineSearchResponse{}
 
 	for _, medicine := range medicineList {
-		medicineInfo := MedicineModelToResponse(medicine)
+		var tastingItem []model.MedicineTasting
+		var attributionItem []model.MedicineAttribution
+		var tastingList string
+		var attributionList string
+		tastingSlice := util.StringToNumberSlice(medicine.TastingIds)
+		attributionSlice := util.StringToNumberSlice(medicine.AttributionIds)
+
+		m.DB.Where(tastingSlice).Find(&tastingItem)
+
+		for _, t := range tastingItem {
+			tastingList += t.Name + ","
+		}
+
+		m.DB.Where(attributionSlice).Find(&attributionItem)
+
+		for _, t := range attributionItem {
+			attributionList += t.Name + ","
+		}
+
+		medicineInfo := MedicineModelToResponse(medicine, tastingList[0:len(tastingList)-1], attributionList[0:len(attributionList)-1])
 		array.Push(&response.MedicineList, medicineInfo)
 	}
 

@@ -1,1 +1,55 @@
 2024-08-01T20:25:01.290+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T12:37:57.919+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T12:39:12.159+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T12:39:18.290+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T13:20:59.834+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = Error 1054 (42S22): Unknown column 'tcms_medicine_character.deleted_at' in 'where clause'
+2024-08-03T13:24:39.630+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T13:25:33.665+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T13:25:49.661+0800	error	服务器启动失败：listen tcp 0.0.0.0:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2024-08-03T13:26:04.129+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 0.0.0.0:50001: connectex: No connection could be made because the target machine actively refused it."
+2024-08-03T13:26:04.540+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 0.0.0.0:50001: connectex: No connection could be made because the target machine actively refused it."
+2024-08-03T14:53:05.778+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T14:59:39.600+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:00:53.336+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:00:53.635+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:14:46.804+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:15:44.494+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:26:07.301+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:27:20.495+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:27:20.776+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T15:28:08.017+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T15:43:27.161+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T15:48:55.016+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T16:07:36.967+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T16:08:17.197+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T16:09:31.063+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T16:10:54.448+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineTasting: unsupported relations for schema Medicine
+2024-08-03T16:45:11.728+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineAttribution: unsupported relations for schema Medicine
+2024-08-03T16:55:33.364+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = invalid field found for struct medicine_service/model.Medicine's field MedicineTastings: define a valid foreign key for relations or implement the Valuer/Scanner interface
+2024-08-03T16:56:30.520+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = invalid field found for struct medicine_service/model.Medicine's field MedicineTastings: define a valid foreign key for relations or implement the Valuer/Scanner interface
+2024-08-03T16:56:30.770+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = invalid field found for struct medicine_service/model.Medicine's field MedicineTastings: define a valid foreign key for relations or implement the Valuer/Scanner interface
+2024-08-03T17:21:27.631+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = Error 1054 (42S22): Unknown column 'tcms_medicine_tasting.deleted_at' in 'where clause'
+2024-08-03T17:24:20.050+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = Error 1054 (42S22): Unknown column 'tcms_medicine_tasting.deleted_at' in 'where clause'
+2024-08-03T17:41:59.655+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineCategory: unsupported relations for schema Medicine
+2024-08-03T17:43:32.374+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineCategory: unsupported relations for schema Medicine
+2024-08-03T17:44:16.204+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = MedicineCategory: unsupported relations for schema Medicine
+2024-08-03T17:44:54.887+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:45:34.562+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:45:34.835+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:48:14.351+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:51:49.799+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:54:40.135+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:54:40.458+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:57:04.340+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unknown desc = record not found
+2024-08-03T17:58:50.685+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T17:59:42.500+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T17:59:42.703+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Unavailable desc = error reading from server: read tcp 127.0.0.1:57082->127.0.0.1:50001: wsarecv: An existing connection was forcibly closed by the remote host.
+2024-08-03T18:01:32.583+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:03:20.208+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:04:06.536+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:05:05.534+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:05:49.448+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:07:48.116+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:08:21.447+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:15:12.329+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data
+2024-08-03T18:17:19.775+0800	error	远程调用{SearchMedicine}方法出错：rpc error: code = Internal desc = grpc: failed to unmarshal the received message: proto: cannot parse invalid wire-format data

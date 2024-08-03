@@ -16,7 +16,7 @@ func main() {
 	}
 
 	db, errConn := util.DBConnect(cfg.DB)
-	//
+
 	if errConn != nil {
 		log.Fatalf("Failed to connect DB: %v", errConn)
 		return
@@ -24,6 +24,11 @@ func main() {
 
 	if errMigrate := db.AutoMigrate(
 		&model.Medicine{},
+		&model.MedicineCategory{},
+		&model.MedicineSubcategory{},
+		&model.MedicineCharacter{},
+		&model.MedicineTasting{},
+		&model.MedicineAttribution{},
 	); errMigrate != nil {
 		log.Fatalf("Failed to migrate the data model: %v", errMigrate)
 		return

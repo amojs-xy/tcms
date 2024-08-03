@@ -141,6 +141,11 @@ const setMedicineTotal = ({ id, total, dose }) => {
 }
 
 const deleteMedicine = (id) => {
+    if (!id) {
+        medicineList.value = medicineList.value.slice(0, medicineList.value.length - 1);
+        medicineList.value[medicineList.value.length - 1] = emptyData
+        return;
+    }
     medicineList.value = medicineList.value.filter(m => m.id !== id);
 }
 

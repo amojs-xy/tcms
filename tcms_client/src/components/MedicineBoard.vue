@@ -79,6 +79,7 @@ const searchMedicine = _.debounce(
         } else {
             isListShow.value = false;
             medicineList.value = [];
+            emit('delete-medicine');
         }
     }, 300
 )
