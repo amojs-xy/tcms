@@ -1,5 +1,5 @@
 <template>
-<div class="medicine-board" :data-id="data.id">
+<div class="medicine-board" :data-id="data.id" @click="showMedicineInfo($event, data)">
     <span class="icon icon-times" @click="deleteMedicine(data.id)">&times;</span>
     <div class="name-wrapper">
         <input
@@ -34,8 +34,9 @@
 
 <script setup>
 import {ref} from 'vue';
-import {searchMedicineService} from "../service/medicine.ts";
+import {searchMedicineService} from "../service/medicine.js";
 import MedicineMenu from './MedicineMenu.vue';
+import MedicineMessage from './MedicineMessage';
 import _ from 'lodash'
 
 const props = defineProps({
@@ -63,8 +64,9 @@ const searchMedicine = _.debounce(
                 const { data } = await searchMedicineService(value);
 
                 if (data === null) {
-                    isListShow.value = false;
-                    medicineList.value = [];
+                    medicineList.value = [{
+                        "name": "未查询到数据"
+                    }];
                     return;
                 }
 
@@ -73,8 +75,9 @@ const searchMedicine = _.debounce(
                     isListShow.value = true;
                 }
             } catch (e) {
-                isListShow.value = false;
-                medicineList.value = [];
+                medicineList.value = [{
+                        "name": "查询出现错误"
+                    }];
             }
         } else {
             isListShow.value = false;
@@ -97,7 +100,6 @@ const selectMedicine = (m) => {
 const inputDose = () => {
     if (!/^\d+/.test(medicineDose.value)) {
         medicineDose.value = 0;
-        return;
     }
 
     if (props.data.id !== 0) {
@@ -126,6 +128,18 @@ const handleMenuEnter = () => {
 const deleteMedicine = (id) => {
     if (id === 0) return;
     emit('delete-medicine', id);
+}
+
+const showMedicineInfo = (e, data) => {
+    const tar = e.target;
+
+    if (tar.tagName.toLowerCase() === 'input') return;
+
+    if (data.id === 0) return;
+
+    MedicineMessage.alert({
+        data: props.data
+    });
 }
 </script>
 
@@ -189,7 +203,6 @@ input:focus {
     .icon {
         position: absolute;
         top: 0;
-        z-index: 1;
         cursor: pointer;
         font-size: 20px;
         color: #666;

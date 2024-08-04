@@ -31,16 +31,20 @@
               总计<span>{{ total }}</span>元
           </div>
       </div>
+      <div>
+        <prescription :show="prescriptShow" :data="prescriptionData"></prescription>    
+      </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 
 import MedicineBoard from "./components/MedicineBoard.vue";
+import Prescription from './components/Prescription.vue';
 import {computed, onMounted, ref, toRaw, watch} from "vue";
-import { type UseDraggableReturn, VueDraggable } from 'vue-draggable-plus';
+import { VueDraggable } from 'vue-draggable-plus';
 
-const el = ref<UseDraggableReturn>();
+const el = ref();
 const disabled = ref(false);
 
 const onStart = (e) => {
@@ -60,9 +64,10 @@ const onUpdate = () => {
 }
 
 const  medicineList = ref([])
+const prescriptionData = ref(null);
+const prescriptShow = ref(false);
 
 const dose = ref(1);
-const dragging = ref(false);
 
 const isSubmitPass = ref(false);
 
@@ -141,11 +146,12 @@ const setMedicineTotal = ({ id, total, dose }) => {
 }
 
 const deleteMedicine = (id) => {
-    if (!id) {
+    if (!id && medicineList.value.length > 1) {
         medicineList.value = medicineList.value.slice(0, medicineList.value.length - 1);
         medicineList.value[medicineList.value.length - 1] = emptyData
         return;
     }
+
     medicineList.value = medicineList.value.filter(m => m.id !== id);
 }
 
@@ -177,10 +183,11 @@ function submitPrescription () {
     const prescription = {
         dose: dose.value,
         total: Number(total.value),
-        medicineList: toRaw(medicineList.value).slice(0, medicineList.value.length - 1)
+        medicineList: medicineList.value.slice(0, medicineList.value.length - 1)
     }
 
-    console.log(prescription)
+    prescriptionData.value = prescription;
+    prescriptShow.value = true;
 }
 </script>
 

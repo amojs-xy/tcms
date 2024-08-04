@@ -1,10 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
-
-interface Response<T = any> {
-    code: number;
-    msg: string;
-    data: T;
-}
+import axios from 'axios';
 
 axios.defaults.baseURL = "http://localhost:8080/v1";
 
@@ -12,7 +6,7 @@ axios.interceptors.request.use((c) => {
     return c
 })
 
-axios.interceptors.response.use((r: AxiosResponse<Response>): AxiosResponse['data'] => {
+axios.interceptors.response.use((r) => {
     const { data } = r;
     return {
         code: data.code,
