@@ -41,8 +41,8 @@
 
 import MedicineBoard from "./components/MedicineBoard.vue";
 import Prescription from './components/Prescription.vue';
-import {computed, onMounted, ref, toRaw, watch} from "vue";
-import { VueDraggable } from 'vue-draggable-plus';
+import {computed, onMounted, ref, watch} from "vue";
+import {VueDraggable} from 'vue-draggable-plus';
 
 const el = ref();
 const disabled = ref(false);
@@ -162,7 +162,6 @@ watch(() => dose.value, () => {
 
     if (!/^\d+/.test(dose.value)) {
         dose.value = 0;
-        return;
     }
 });
 
@@ -175,18 +174,16 @@ function checkSubmitPass () {
     }
 
     isSubmitPass.value = medicineList.value.slice(0, medicineList.value.length - 1).every(m => {
-        return m.id !== 0 && m.dose != 0;
+        return m.id !== 0 && m.dose !== 0;
     });
 }
 
 function submitPrescription () {
-    const prescription = {
+    prescriptionData.value = {
         dose: dose.value,
         total: Number(total.value),
         medicineList: medicineList.value.slice(0, medicineList.value.length - 1)
-    }
-
-    prescriptionData.value = prescription;
+    };
     prescriptShow.value = true;
 }
 </script>
